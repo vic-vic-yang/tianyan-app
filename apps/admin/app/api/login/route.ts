@@ -19,6 +19,7 @@ export async function POST(request: Request) {
 
     const { email, password } = await request.json();
     const { db } = await connectToDatabase();
+    
 
     // 3. 检查邮箱是否已存在
     const existingUser = await db.collection('users').findOne({ email });

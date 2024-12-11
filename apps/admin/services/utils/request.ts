@@ -54,10 +54,13 @@ export class Request {
   private async fetchWithTimeout(input: RequestInfo, init?: RequestConfig): Promise<Response> {
     const controller = new AbortController();
     const timeout = init?.timeout || this.timeout;
+    console.log('timeout', timeout);
 
     const timeoutId = setTimeout(() => {
       controller.abort();
     }, timeout);
+    console.log('input', input);
+    console.log('init', init);
 
     try {
       const response = await fetch(input, {
