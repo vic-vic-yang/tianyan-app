@@ -17,8 +17,6 @@ export async function GET(request: Request) {
 
   token = token.slice(7, token.length);
 
-  console.log('token====', token);
-
   const user = await db.collection('users').findOne({ token: token });
   if (!user) {
     return NextResponse.json({
