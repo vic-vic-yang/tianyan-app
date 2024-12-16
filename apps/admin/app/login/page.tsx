@@ -1,8 +1,7 @@
 'use client';
 
 import { login } from '@/app/actions/auth';
-import { FormState } from '@/app/lib/definitions';
-import { ApiCode } from '@/services/utils/api';
+import { ApiCode, ApiResponse } from '@/services/utils/apiResponse';
 import { Button } from '@repo/ui/components/ui/button';
 import { Input } from '@repo/ui/components/ui/input';
 import { useRouter } from 'next/navigation';
@@ -17,10 +16,10 @@ export default function Login() {
 }
 
 function SignupForm() {
-  const [state, action, isPending] = useActionState((prevState: FormState, formData: FormData) => login(formData), {
+  const [state, action, isPending] = useActionState((_state: ApiResponse, formData: FormData) => login(formData), {
+    code: 0,
     message: '',
   });
-
   const router = useRouter();
 
   useEffect(() => {
@@ -45,12 +44,13 @@ function SignupForm() {
         <div>
           <p>Password must:</p>
           <ul>
-            {state.errors.password.map((error) => (
-              <li key={error}>- {error}</li>
+            {state.errors.password.map((err: string) => (
+              <li key={err}>- {err}</li>
             ))}
           </ul>
         </div>
       )}
+      {state?.message && <p>{state.message}</p>}
       <Button disabled={isPending} type="submit">
         login
       </Button>

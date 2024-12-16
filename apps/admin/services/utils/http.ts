@@ -3,7 +3,7 @@ import { Request } from './request';
 
 
 export const http = new Request({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
   timeout: 10000,
 });
 

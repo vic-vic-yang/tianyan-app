@@ -1,9 +1,13 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/components/ui/button";
-import styles from "./page.module.css";
-import { Input } from "@repo/ui/components/ui/input";
+'use client';
 
-type Props = Omit<ImageProps, "src"> & {
+import userApi from '@/services/userApi';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
+import Image, { type ImageProps } from 'next/image';
+import styles from './page.module.css';
+import { useEffect } from 'react';
+
+type Props = Omit<ImageProps, 'src'> & {
   srcLight: string;
   srcDark: string;
 };
@@ -20,6 +24,12 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
+  useEffect(() => {
+    userApi.getUserInfo().then((res) => {
+      console.log('res====', res);
+    });
+  }, []);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -46,13 +56,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
+            <Image className={styles.logo} src="/vercel.svg" alt="Vercel logomark" width={20} height={20} />
             Deploy now
           </a>
           <a
@@ -64,9 +68,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
-        <Button >
-          Open alert
-        </Button>
+        <Button>Open alert</Button>
         <Input />
       </main>
       <footer className={styles.footer}>
@@ -75,27 +77,11 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
+          <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
           Examples
         </a>
-        <a
-          href="https://turbo.build?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
+        <a href="https://turbo.build?utm_source=create-turbo" target="_blank" rel="noopener noreferrer">
+          <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
           Go to turbo.build →
         </a>
       </footer>

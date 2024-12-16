@@ -1,15 +1,8 @@
-export interface ApiResponse<T = any> {
+interface ApiResponse<T = any> {
   code: number;
   data?: T;
   message?: string;
   errors?: Record<string, string[]>;
-}
-
-export enum ApiCode {
-  SUCCESS = 200,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  SERVER_ERROR = 500
 }
 
 export interface RequestConfig extends RequestInit {

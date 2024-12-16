@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
-import { ApiResponse, RequestConfig, RequestInterceptors } from './api';
+import { RequestConfig, RequestInterceptors } from './api';
+import { ApiResponse } from './apiResponse';
 import { CacheManager } from './cache';
 import { RequestQueue } from './requestQueue';
 
@@ -54,19 +54,19 @@ export class Request {
   private async fetchWithTimeout(input: RequestInfo, init?: RequestConfig): Promise<Response> {
     const controller = new AbortController();
     const timeout = init?.timeout || this.timeout;
-    console.log('timeout', timeout);
+    console.log('input', input);
+    console.log('init', init);
 
     const timeoutId = setTimeout(() => {
       controller.abort();
     }, timeout);
-    console.log('input', input);
-    console.log('init', init);
 
     try {
       const response = await fetch(input, {
         ...init,
         signal: controller.signal,
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'application/json',
           ...init?.headers,
         },
@@ -90,14 +90,50 @@ export class Request {
     return `${this.baseURL}${url}`;
   }
 
-  private handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
-    return response.json().then((data) => ({
-      ...data,
-      data: this.transformResponse(data.data),
-    }));
+  private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+    // 检查响应状态码
+    if (!response.ok) {
+      // 尝试读取错误响应内容
+      const errorText = await response.text();
+      console.error('Response error:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: errorText.slice(0, 200), // 只显示前200个字符
+      });
+
+      throw new Error(`HTTP 错误! 状态码: ${response.status}, 响应内容: ${errorText.slice(0, 100)}...`);
+    }
+
+    const contentType = response.headers.get('content-type');
+
+    // 调试信息
+    console.debug('Response headers:', {
+      contentType,
+      allHeaders: Object.fromEntries(response.headers.entries()),
+    });
+
+    try {
+      // 即使 Content-Type 不是 JSON，也尝试解析
+      const text = await response.text();
+      console.log('text', text);
+      const data = JSON.parse(text);
+      return {
+        ...data,
+        data: this.transformResponse(data.data),
+      };
+    } catch (error) {
+      console.error('Response parsing error:', error);
+      throw new Error(`解析响应失败: ${error}\n接收到的 Content-Type: ${contentType}`);
+    }
   }
 
-  async request<T = any>(url: string, config: RequestConfig = {}): Promise<ApiResponse<T>> {
+  async request<T = any>(
+    url: string,
+    config: RequestConfig = {
+      withToken: true,
+    }
+  ): Promise<ApiResponse<T>> {
     const finalConfig = { ...config };
 
     // 应用请求拦截器
@@ -123,7 +159,7 @@ export class Request {
       try {
         // 处理 token
         if (finalConfig.withToken !== false) {
-          const token = (await cookies()).get('token')?.value;
+          const token = document.cookie.split('=')[1];
           if (token) {
             finalConfig.headers = {
               ...finalConfig.headers,
@@ -132,9 +168,14 @@ export class Request {
           }
         }
 
+        console.log('finalConfig===', finalConfig);
+
         const response = await this.fetchWithTimeout(this.getFullUrl(url), finalConfig);
+        console.log('response===', response);
 
         let result = await this.handleResponse<T>(response);
+
+        console.log('result===', result);
 
         // 应用响应拦截器
         if (this.interceptors.response) {
