@@ -16,6 +16,9 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "pipeline": {
+      "env": ["MONGODB_URI", "NODE_ENV"]
     }
   }
 }
