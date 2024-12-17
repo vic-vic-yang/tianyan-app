@@ -1,5 +1,8 @@
 {
-  "buildCommand": "turbo run build",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "buildEnvironment": {
+    "MONGODB_URI": "@mongodb_uri",
+    "MONGODB_DB": "@mongodb_db"
+  }
 }
