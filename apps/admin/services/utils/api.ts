@@ -10,7 +10,6 @@ export interface RequestConfig extends RequestInit {
   baseURL?: string;
   retry?: number;  // 重试次数
   retryDelay?: number;  // 重试延迟
-  cache?: boolean;  // 是否缓存
   cacheTime?: number;  // 缓存时间
   withToken?: boolean;  // 是否需要token
   transform?: boolean;  // 是否转换响应数据

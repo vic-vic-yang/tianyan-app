@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { RequestConfig, RequestInterceptors } from './api';
 import { ApiResponse } from './apiResponse';
 import { CacheManager } from './cache';
@@ -160,8 +159,7 @@ export class Request {
       try {
         // 处理 token
         if (finalConfig.withToken !== false) {
-          const token =
-            typeof window === 'undefined' ? (await cookies()).get('token')?.value : document.cookie.split('=')[1];
+          const token = document.cookie.split('=')[1];
           if (token) {
             finalConfig.headers = {
               ...finalConfig.headers,
