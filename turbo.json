@@ -5,7 +5,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", ".env.local"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["MONGODB_URI"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -16,9 +17,6 @@
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "pipeline": {
-      "env": ["MONGODB_URI", "NODE_ENV"]
     }
   }
 }
