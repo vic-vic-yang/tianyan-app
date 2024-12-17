@@ -26,7 +26,7 @@ const ThemeImage = (props: Props) => {
 export default function Home() {
   useEffect(() => {
     userApi.getUserInfo().then((res) => {
-      console.log('res====', res);
+      console.log('res======', res);
     });
   }, []);
 
