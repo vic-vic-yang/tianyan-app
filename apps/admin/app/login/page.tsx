@@ -18,8 +18,8 @@ export default function Login() {
     <div className="flex min-h-screen">
       {/* 左侧动画区域 */}
       <div className="from-primary to-secondary hidden w-1/2 items-center justify-center bg-gradient-to-tr md:flex">
-        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-primary">
-          <div className="pointer-events-none absolute inset-0 z-20 h-full w-full bg-primary [mask-image:radial-gradient(transparent,white)]" />
+        <div className="bg-primary relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
+          <div className="bg-primary pointer-events-none absolute inset-0 z-20 h-full w-full [mask-image:radial-gradient(transparent,white)]" />
 
           <Boxes />
           <h1 className={cn('relative z-20 text-xl text-white md:text-4xl')}>Tailwind is Awesome</h1>
@@ -33,7 +33,7 @@ export default function Login() {
       <div className="flex w-full items-center justify-center md:w-1/2">
         <div className="w-full max-w-md rounded-lg bg-white p-8">
           <div className="mb-6 flex justify-center">
-            <Image src="/globe.svg" alt="Logo" width={100} height={100} />
+            <Image src="/globe.svg" alt="Logo" width={60} height={60} />
           </div>
           <h2 className="text-primary mb-6 text-center text-2xl font-bold">登录您的账户</h2>
           <SignupForm />
