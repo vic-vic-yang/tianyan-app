@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(req: NextRequest) {
   // 获取当前域名
   const url = req.nextUrl.clone();
-
+  return NextResponse.next();
   // 获取 cookies 中的 token
   const token = req.cookies.get('token');
 
